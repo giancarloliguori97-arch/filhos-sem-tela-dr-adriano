@@ -6,6 +6,22 @@
 <meta name="description" content="Triagem do Protocolo Verstehen de 5 dias, do Dr. Adriano Alves, psiquiatra.">
 <title>Quiz Meus Filhos Sem Tela</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..700;1,9..144,400..700&family=Outfit:wght@400;500;600&display=swap">
+<!-- Meta Pixel Code -->
+<script>
+!function(f,b,e,v,n,t,s)
+{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window, document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+fbq('init', '1384351202573061');
+fbq('track', 'PageView');
+</script>
+<noscript><img height="1" width="1" style="display:none"
+src="https://www.facebook.com/tr?id=1384351202573061&ev=PageView&noscript=1"/></noscript>
+<!-- End Meta Pixel Code -->
 </head>
 <body>
 <style>
@@ -415,6 +431,7 @@ const LEVELS = [
 
 const A = {};            // respostas: número (índice) ou lista de índices
 let cur = 0, timers = [];
+const fired = {};
 const byId = id => Q.find(q => q.id === id);
 const g = (f,m,n) => A[1] === 1 ? m : A[1] === 2 ? n : f;
 const lab = o => typeof o.l === "function" ? o.l() : o.l;
@@ -613,6 +630,9 @@ function show(n, dir){
   document.getElementById("back").hidden = cur === 0;
   document.getElementById("jump").value = cur;
   window.scrollTo(0, 0); stage.focus({preventScroll:true});
+  if (window.fbq && !fired[s.k]) { fired[s.k] = 1;
+    if (s.k === "res") fbq("track", "Lead");
+    if (s.k === "off") fbq("track", "ViewContent", {content_name:"Protocolo Verstehen de 5 dias", value:67, currency:"BRL"}); }
   if (s.k === "vid") mountVideo();
   if (s.k === "info") { const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
     timers.push(setTimeout(() => { const d = stage.querySelector(".dots"), t = stage.querySelector(".txt"); if (d) d.remove(); if (t) t.hidden = false; }, reduce ? 0 : 900)); }
@@ -644,6 +664,7 @@ stage.addEventListener("click", e => {
     timers.push(iv);
   }
 });
+stage.addEventListener("click", e => { if (e.target.closest(".cta.buy") && window.fbq) fbq("track", "InitiateCheckout", {value:67, currency:"BRL"}); });
 document.getElementById("back").addEventListener("click", () => show(cur - 1, -1));
 
 /* ---------- modo revisão (só no protótipo) ---------- */
